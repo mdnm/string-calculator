@@ -4,7 +4,7 @@
 #include <ctype.h>
 #define TAMANHO 100
 
-void endProgram()
+void end()
 {
   system("cls");
   printf("BURRO !");
@@ -54,7 +54,7 @@ void clearString(char *str)
   {
     if (!isdigit(str[i]) && !isInArray(str[i], operators))
     {
-      endProgram();
+      end();
     }
   }
 }
@@ -71,19 +71,62 @@ int main()
   trim(input);
   clearString(input);
 
-  char vetorDeitado[TAMANHO], vetorEmPe[TAMANHO], pedaco[TAMANHO];
-  int posicaoDeitado = -1, posicaoEmPe = -1, j = 0;
+  char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
+  int ultimoIndice = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1;
 
-  for (int i = 0; i < strlen(input); i++)
+  if (!isdigit(input[0]))
   {
-    while (isdigit(input[j]))
-    {
-      pedaco[j] = input[j];
-      j++;
-    }
+    end();
   }
 
-  printf("\n%s", input);
+  while (ultimoIndice != -1)
+  {
+    printf("\n ULTIMO INDICE %d e %d \n ", ultimoIndice, strlen(input));
+    for (ultimoIndice; ultimoIndice < strlen(input); ultimoIndice++)
+    {
+      if (input[ultimoIndice] == '\0')
+      {
+        ultimoIndice = -1;
+        break;
+      }
+
+      if (isdigit(input[ultimoIndice]))
+      {
+        continue;
+      }
+
+      if (pegarOperador)
+      {
+        pedaco[0] = input[ultimoIndice];
+      }
+      else
+      {
+        for (int j = 0; j < ultimoIndice; j++)
+        {
+          pedaco[j] = input[j];
+        }
+      }
+    }
+
+    if (!pegarOperador)
+    {
+      posicaoDeitado++;
+      strcpy(deitado[posicaoDeitado], pedaco);
+      pegarOperador = 1;
+      printf("\n %s", deitado[posicaoDeitado]);
+    }
+    else
+    {
+      if (posicaoEmPe > -1)
+      {
+      }
+
+      posicaoEmPe++;
+      strcpy(emPe[posicaoEmPe], pedaco);
+      pegarOperador = 0;
+      printf("\n %s", emPe[posicaoEmPe]);
+    }
+  }
 
   getchar();
   getchar();
