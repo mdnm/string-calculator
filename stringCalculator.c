@@ -6,7 +6,7 @@
 
 void end()
 {
-  system("cls");
+  system("clear");
   printf("BURRO !");
   getchar();
   getchar();
@@ -63,7 +63,7 @@ int main()
 {
   char input[TAMANHO];
 
-  system("cls");
+  system("clear");
   printf("Digite uma string de ate %d caracteres: ", TAMANHO - 1);
   fflush(stdin);
   gets(input);
@@ -72,60 +72,63 @@ int main()
   clearString(input);
 
   char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
-  int ultimoIndice = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1;
+  int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0;
 
   if (!isdigit(input[0]))
   {
     end();
   }
 
-  while (ultimoIndice != -1)
+  while (loop < 5)
   {
-    printf("\n ULTIMO INDICE %d e %d \n ", ultimoIndice, strlen(input));
-    for (ultimoIndice; ultimoIndice < strlen(input); ultimoIndice++)
+    for (leitor; leitor < strlen(input); leitor++)
     {
-      if (input[ultimoIndice] == '\0')
-      {
-        ultimoIndice = -1;
-        break;
-      }
-
-      if (isdigit(input[ultimoIndice]))
+      printf("\n\n------Entrei no for, meu leitor é %d e o tamanho do input é %d.", leitor, strlen(input));
+      if(isdigit(input[leitor]) && (leitor + 1) < strlen(input))
       {
         continue;
       }
 
-      if (pegarOperador)
+      if (pegarOperador == 1)
       {
-        pedaco[0] = input[ultimoIndice];
+        printf("\n\nPeguei operador: %c.", input[leitor]);
+        pedaco[0] = input[leitor];
+        leitor++;
+        ultimaPos = leitor;
       }
       else
       {
-        for (int j = 0; j < ultimoIndice; j++)
+        printf("\n\nPeguei número: %c.", input[0]);
+        for (int j = 0; j < leitor; j++)
         {
-          pedaco[j] = input[j];
+          pedaco[j] = input[ultimaPos];
+          ultimaPos++;
         }
       }
+      break;
     }
 
-    if (!pegarOperador)
+    if (pegarOperador == 0)
     {
       posicaoDeitado++;
+      printf("\n\nPeguei um pedaço <%s> e coloquei na posição: %d", pedaco, posicaoDeitado);
       strcpy(deitado[posicaoDeitado], pedaco);
       pegarOperador = 1;
-      printf("\n %s", deitado[posicaoDeitado]);
+      printf("\nDeitado: %s", deitado[posicaoDeitado]);
     }
     else
     {
-      if (posicaoEmPe > -1)
-      {
-      }
+      // if (posicaoEmPe > -1)
+      // {
+      // }
 
       posicaoEmPe++;
       strcpy(emPe[posicaoEmPe], pedaco);
       pegarOperador = 0;
-      printf("\n %s", emPe[posicaoEmPe]);
+      printf("\nEm pé: %s", emPe[posicaoEmPe]);
     }
+    memset(pedaco, 0, strlen(pedaco));
+    loop++;
   }
 
   getchar();
