@@ -1,0 +1,79 @@
+######################### Primeira Etapa #########################
+1. Criar um vetor de caracteres <input>.
+
+2. Fazer com que o usuário digite a operação.
+
+3. Remover todos os espaços entre os caracteres.
+
+4. Verificar se existem caracteres diferentes de:
+- Números (digitos)
+- Os seguintes operadores: '+', '-' '*', '/', '^', '(', ')'.
+Se existirem, <ENCERRAR O PROGRAMA>. Se não, segue o baile.
+
+5. Criar 2 vetores de strings vazios: <emPe>, <deitado>.
+- O vetor <emPe> e o vetor <deitado> são vetores de strings,
+  ou seja, um vetor de vetores de caracteres (ou matriz de
+  caracteres).
+
+6. Criar 2 variáveis inteiras: <iVertical>, <iHorizontal>.
+- Ambas as variáveis devem ser atribuídas o valor -1.
+
+7. Criar 1 vetor de caractere <pedaco>.
+
+8. Verificar os digitos da string <input> até encontrar um
+   operador e copiar ele na string <pedaco>.
+- Exemplo:134+25-21 --> 134.
+- Importante usar a função strcpy() para imprimir em cima
+  do que havia na string <pedaco>.
+
+9. Verificar o que foi inserido na string <pedaco>.
+Se número:
+	- Acrescentar 1 unidade em <iHorizontal>.
+	- Copiar os caracteres da string <pedaco> para a matriz
+	  <deitado[iHorizontal]>.
+
+Se operador:
+	- Verificar tudo o que pode ser removido da matriz <emPe>
+	  antes de fazer qualquer coisa. Utilizar a tabela.
+	  
+	  O que está em cima é o operador na string <pedaco> e o
+	  que está na vertical é o operador já presente na matriz
+	  <emPe[iVertical]>.
+	  
+	    ( ^ * / + - )
+	  ( F F F F F F T
+	  ^ F F T T T T T
+	  * F F T T T T T
+	  / F F T T T T T
+	  +	F F F F T T T
+	  - F F F F T T T
+	  ) F F F F F F F
+	   
+	- Se *True* remover a string da matriz <emPe>:
+		- Acrescentar 1 unidade em <iHorizontal>.
+		- Copiar string para <deitado[iHorizontal]>.
+		- Remover a string da matriz <emPe[iVertical]>.
+		- Reduz 1 unidade de <iVertical>.
+		- Repeitr a verificação da tabela com o próximo operador
+		  na matriz <emPe[iVertical]>.
+		  
+  	- Se *Falso*, parar de comparar com a tabela e acrescentar
+	  a string na matriz (após todas as remoções possíveis):
+		- Acrescentar 1 unidade em <iVertical>.
+		- Copiar string para <emPe[iVertical]>.
+		  
+  	  **ATENÇÃO**
+  	  O fecha parenteses ')' é uma excessão! Ele da true para tudo
+	  na tabela menos para ele mesmo.
+	  - Verificar se existe um abre parenteses '(' na matriz <emPe>
+	    antes de qualquer coisa.
+	    	- Se existir, segue a verificação normalmente.
+	    	- Se não, encerrar o programa e apresentar mensagem de
+	    	  erro.
+	    	  
+	  Além disso, os parenteses tem uma mecânica diferente:
+	  - Quando a tabela der *True* no parenteses, ele não deve ser
+	    copiado para a matriz <deitado>. Ele simplemente deve ser
+	    removido da matriz <emPe>:
+	    	- Remove '(' da matriz <emPe[iVertical].
+	    	- Reduz 1 unidade de <iVertical>.
