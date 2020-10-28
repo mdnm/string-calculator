@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #define TAMANHO 100
 
 char operadores[7] = {'(', '^', '*', '/', '+', '-', ')'};
@@ -100,7 +101,7 @@ int main()
 {
   char input[TAMANHO];
 
-  system("cls");
+  system("clear");
   printf("Digite uma string de ate %d caracteres: ", TAMANHO - 1);
   fflush(stdin);
   gets(input);
@@ -118,9 +119,11 @@ int main()
 
   while (loop < strlen(input))
   {
+
     for (leitor; leitor < strlen(input); leitor++)
     {
-      printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
+      // printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
+      // printf("\n\n\tPegar Operador = %d.", pegarOperador);
       if (isdigit(input[leitor]) && (leitor + 1) < strlen(input))
       {
         continue;
@@ -137,9 +140,15 @@ int main()
       else
       {
         int tamanhoDigito = leitor - ultimaPos;
+        // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
+        // printf("\n\n\tO leitor está em: %d.", leitor);
+        // printf("\n\tA última posição é: %d.", ultimaPos);
+        if(leitor + 1 == strlen(input))//Prestar atenção para ver se não da pau mais para frente.
+        {
+          tamanhoDigito++;
+        }
         for (int j = 0; j < tamanhoDigito; j++)
         {
-          //printf("\n\ninput[%d]: %c.", j, input[ultimaPos]);
           pedaco[j] = input[ultimaPos];
           ultimaPos++;
         }
@@ -150,51 +159,53 @@ int main()
     if (pegarOperador == 0)
     {
       posicaoDeitado++;
-      printf("\n\nPeguei um pedaco <%s> e coloquei na posicao: %d", pedaco, posicaoDeitado);
+      printf("\n\nPeguei o pedaco <%s> e coloquei em deitado[%d].", pedaco, posicaoDeitado);
       strcpy(deitado[posicaoDeitado], pedaco);
       pegarOperador = 1;
-      printf("\nDeitado: %s", deitado[posicaoDeitado]);
     }
     else
     {
-      printf("\n\n posicao EM PE %d", posicaoEmPe);
       if (posicaoEmPe > -1)
       {
         for (int i = 0; i < posicaoEmPe + 1; i++)
         {
           if (isTrueInMatrix(emPe[i][0], pedaco[0]) == 0)
           {
-            printf("\n tabela deu false emPe[%d][0]: %c | pedaco[0]: %c", i, emPe[i][0], pedaco[0]);
+            printf("\n\n----Tabela deu False emPe[%d][0]: %c | Pedaco[0]: %c", i, emPe[i][0], pedaco[0]);
             break;
           }
 
-          printf("\n tabela deu true emPe[%d][0]: %c | pedaco[0]: %c", i, emPe[i][0], pedaco[0]);
+          printf("\n\n----Tabela deu True emPe[%d][0]: %c | Pedaco[0]: %c", i, emPe[i][0], pedaco[0]);
 
           posicaoDeitado++;
           strcpy(deitado[posicaoDeitado], emPe[i]);
 
-          printf("\nDeitado: %s", deitado[posicaoDeitado]);
+          printf("\n\n----Tirei <%s> do emPe[%d] e coloquei em deitado[%d].", deitado[posicaoDeitado], i, posicaoDeitado);
           memset(emPe[i], 0, strlen(emPe[i]));
           posicaoEmPe--;
+          printf("\n\n----Agora posicaoEmPe é: %d.", posicaoEmPe);
         }
       }
 
       posicaoEmPe++;
       strcpy(emPe[posicaoEmPe], pedaco);
 
-      printf("\nEm pe: %s", emPe[posicaoEmPe]);
+      printf("\n\nPeguei o pedaço <%s> e coloquei em emPe[%d].", emPe[posicaoEmPe], posicaoEmPe);
 
-      if (isdigit(input[leitor + 1]))
+      // printf("\n\tAntes de entrar no if o input[leitor] é: %c.", input[leitor]);
+      if (isdigit(input[leitor]))
       {
         pegarOperador = 0;
       }
     }
 
+    if(leitor + 1 == strlen(input))
+      break;
+
     memset(pedaco, 0, strlen(pedaco));
     loop++;
   }
 
-  getchar();
-  getchar();
+  getchar();getchar();// Pausa o programa.
   return (0);
 }
