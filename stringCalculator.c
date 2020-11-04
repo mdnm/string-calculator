@@ -9,7 +9,7 @@ char operadores[7] = {'(', '^', '*', '/', '+', '-', ')'};
 
 void end()
 {
-  system("clear");
+  system("cls");
   printf("BURRO !");
   getchar();
   getchar();
@@ -101,7 +101,7 @@ int main()
 {
   char input[TAMANHO];
 
-  system("clear");
+  system("cls");
   printf("Digite uma string de ate %d caracteres: ", TAMANHO - 1);
   fflush(stdin);
   gets(input);
@@ -110,7 +110,7 @@ int main()
   isValid(input);
 
   char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
-  int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0;
+  int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0, fechouParenteses = 0;
 
   if (input[0] != '(' && !isdigit(input[0]))
   {
@@ -122,7 +122,7 @@ int main()
 
     for (leitor; leitor < strlen(input); leitor++)
     {
-      // printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
+      //printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
       // printf("\n\n\tPegar Operador = %d.", pegarOperador);
       if (isdigit(input[leitor]) && (leitor + 1) < strlen(input))
       {
@@ -140,10 +140,10 @@ int main()
       else
       {
         int tamanhoDigito = leitor - ultimaPos;
-        // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
-        // printf("\n\n\tO leitor está em: %d.", leitor);
-        // printf("\n\tA última posição é: %d.", ultimaPos);
-        if(leitor + 1 == strlen(input))//Prestar atenção para ver se não da pau mais para frente.
+        /*printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
+        printf("\n\n\tO leitor está em: %d.", leitor);
+        printf("\n\tA última posição é: %d.", ultimaPos);*/
+        if (leitor + 1 == strlen(input) && isdigit(input[ultimaPos + 1])) //Prestar atenção para ver se não da pau mais para frente.
         {
           tamanhoDigito++;
         }
@@ -167,7 +167,7 @@ int main()
     {
       if (posicaoEmPe > -1)
       {
-        for (int i = 0; i < posicaoEmPe + 1; i++)
+        for (int i = posicaoEmPe; i >= 0; i--)
         {
           if (isTrueInMatrix(emPe[i][0], pedaco[0]) == 0)
           {
@@ -176,6 +176,15 @@ int main()
           }
 
           printf("\n\n----Tabela deu True emPe[%d][0]: %c | Pedaco[0]: %c", i, emPe[i][0], pedaco[0]);
+          if (emPe[i][0] == '(' && pedaco[0] == ')')
+          {
+            fechouParenteses = 1;
+            printf("\n\n----Os parenteses sucumbiram HaHaHa");
+            memset(emPe[i], 0, strlen(emPe[i]));
+            posicaoEmPe--;
+            printf("\n\n----Agora posicaoEmPe é: %d.", posicaoEmPe);
+            break;
+          }
 
           posicaoDeitado++;
           strcpy(deitado[posicaoDeitado], emPe[i]);
@@ -187,10 +196,15 @@ int main()
         }
       }
 
-      posicaoEmPe++;
-      strcpy(emPe[posicaoEmPe], pedaco);
+      printf("\n\n FECHOU PARENTESES %d", fechouParenteses);
+      if (fechouParenteses != 1)
+      {
+        posicaoEmPe++;
+        strcpy(emPe[posicaoEmPe], pedaco);
+        printf("\n\nPeguei o pedaço <%s> e coloquei em emPe[%d].", emPe[posicaoEmPe], posicaoEmPe);
+      }
 
-      printf("\n\nPeguei o pedaço <%s> e coloquei em emPe[%d].", emPe[posicaoEmPe], posicaoEmPe);
+      fechouParenteses = 0;
 
       // printf("\n\tAntes de entrar no if o input[leitor] é: %c.", input[leitor]);
       if (isdigit(input[leitor]))
@@ -199,13 +213,22 @@ int main()
       }
     }
 
-    if(leitor + 1 == strlen(input))
+    if (leitor + 1 == strlen(input))
+    {
       break;
+    }
 
     memset(pedaco, 0, strlen(pedaco));
     loop++;
   }
 
-  getchar();getchar();// Pausa o programa.
+  posicaoDeitado++;
+  strcpy(deitado[posicaoDeitado], emPe[posicaoEmPe]);
+
+  printf("\n\n----Tirei <%s> do emPe[%d] e coloquei em deitado[%d].", deitado[posicaoDeitado], posicaoEmPe, posicaoDeitado);
+  memset(emPe[posicaoEmPe], 0, strlen(emPe[posicaoEmPe]));
+
+  getchar();
+  getchar(); // Pausa o programa.
   return (0);
 }
