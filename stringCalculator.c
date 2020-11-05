@@ -113,7 +113,7 @@ int isTrueInMatrix(char emPe, char pedaco)
   }
 }
 
-void expression(int posicaoDeitado, char **deitado)
+void expression(int posicaoDeitado, char deitado[TAMANHO][TAMANHO])
 {
   char emPe[TAMANHO][TAMANHO];
 
@@ -133,7 +133,7 @@ void expression(int posicaoDeitado, char **deitado)
         {
             if(posicaoEmPe < 1)
             {
-                end();
+                printf("\n\n\nERRO!!");
             }
             oper = deitado[atual][0];
             num2 = atof(emPe[posicaoEmPe]);
@@ -161,7 +161,7 @@ void expression(int posicaoDeitado, char **deitado)
         }
     }
 
-    printf("RESULTADO: %s\n", emPe[0]);
+    printf("\n\n\nRESULTADO: %s\n", emPe[0]);
 }
 
 int main()
@@ -207,10 +207,10 @@ int main()
       else
       {
         int tamanhoDigito = leitor - ultimaPos;
-        // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
-        // printf("\n\n\tO leitor está em: %d.", leitor);
-        // printf("\n\tA última posição é: %d.", ultimaPos);
-        if (leitor + 1 == strlen(input) && isFloat(input[ultimaPos + 1]))
+        printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
+        printf("\n\n\tO leitor está em: %d.", leitor);
+        printf("\n\tA última posição é: %d.", ultimaPos);
+        if (leitor + 1 == strlen(input) && isFloat(input[leitor + 1]))
         {
           tamanhoDigito++;
         }
@@ -271,8 +271,6 @@ int main()
         printf("\n\nPeguei o pedaço <%s> e coloquei em emPe[%d].", emPe[posicaoEmPe], posicaoEmPe);
       }
 
-      fechouParenteses = 0;
-
       // printf("\n\tAntes de entrar no if o input[leitor] é: %c.", input[leitor]);
       if (isFloat(input[leitor]))
       {
@@ -281,7 +279,7 @@ int main()
     }
 
     //Filtra quando o último número tem mais de um dígito.
-    if (leitor + 1 == strlen(input)) 
+    if ((input[leitor] != ')' && fechouParenteses == 1) && leitor + 1 == strlen(input))
     {
       printf("\n\nSai do While no if");
       //Se o último número tiver mais de um dígito, não executa o primeiro if após o while.
@@ -289,6 +287,8 @@ int main()
       {
         ultimoNumero = 1;
       }
+      fechouParenteses = 0;
+
       break;
     }
 
@@ -304,7 +304,7 @@ int main()
     // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
     // printf("\n\n\tO leitor está em: %d.", leitor);
     // printf("\n\tA última posição é: %d.", ultimaPos);
-    
+
     if (leitor + 1 == strlen(input) && isFloat(input[ultimaPos + 1]))
     {
       tamanhoDigito++;
