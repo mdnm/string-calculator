@@ -7,6 +7,15 @@
 
 char operadores[7] = {'(', '^', '*', '/', '+', '-', ')'};
 
+int isFloat(char input)
+{
+  if(isdigit(input) || input == '.' || input == ',')
+  {
+    return 1;
+  }
+  return 0;
+}
+
 void end()
 {
   system("clear");
@@ -58,7 +67,6 @@ int isInRangeOfArray(char val, char arr[], int startIndex, int endIndex)
       return 1;
     }
   }
-
   return 0;
 }
 
@@ -66,9 +74,17 @@ void isValid(char *str)
 {
   for (int i = 0; i < strlen(str); i++)
   {
-    if (!isdigit(str[i]) && !isInArray(str[i], operadores))
+    if (!isFloat(str[i]) && !isInArray(str[i], operadores))
     {
       end();
+    }
+
+    if(str[i] == '.' || str[i] == ',')
+    {
+      if(i == 0 || !isdigit(str[i - 1]) || i + 1 == strlen(str) || !isdigit(str[i + 1]))
+      {
+        end();
+      }
     }
   }
 }
@@ -112,7 +128,7 @@ int main()
   char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
   int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0, fechouParenteses = 0, ultimoNumero = 0;
 
-  if (input[0] != '(' && !isdigit(input[0]))
+  if (input[0] != '(' && !isFloat(input[0]))
   {
     end();
   }
@@ -124,7 +140,7 @@ int main()
     {
       // printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
       // printf("\n\n\tPegar Operador = %d.", pegarOperador);
-      if (isdigit(input[leitor]) && (leitor + 1) < strlen(input))
+      if (isFloat(input[leitor]) && (leitor + 1) < strlen(input))
       {
         continue;
       }
@@ -143,7 +159,7 @@ int main()
         // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
         // printf("\n\n\tO leitor está em: %d.", leitor);
         // printf("\n\tA última posição é: %d.", ultimaPos);
-        if (leitor + 1 == strlen(input) && isdigit(input[ultimaPos + 1]))
+        if (leitor + 1 == strlen(input) && isFloat(input[ultimaPos + 1]))
         {
           tamanhoDigito++;
         }
@@ -207,7 +223,7 @@ int main()
       fechouParenteses = 0;
 
       // printf("\n\tAntes de entrar no if o input[leitor] é: %c.", input[leitor]);
-      if (isdigit(input[leitor]))
+      if (isFloat(input[leitor]))
       {
         pegarOperador = 0;
       }
@@ -238,7 +254,7 @@ int main()
     // printf("\n\n\tO leitor está em: %d.", leitor);
     // printf("\n\tA última posição é: %d.", ultimaPos);
     
-    if (leitor + 1 == strlen(input) && isdigit(input[ultimaPos + 1]))
+    if (leitor + 1 == strlen(input) && isFloat(input[ultimaPos + 1]))
     {
       tamanhoDigito++;
     }
