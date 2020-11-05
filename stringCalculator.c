@@ -9,7 +9,7 @@ char operadores[7] = {'(', '^', '*', '/', '+', '-', ')'};
 
 void end()
 {
-  system("clear");
+  system("cls");
   printf("BURRO !");
   getchar();
   getchar();
@@ -101,7 +101,7 @@ int main()
 {
   char input[TAMANHO];
 
-  system("clear");
+  system("cls");
   printf("Digite uma string de ate %d caracteres: ", TAMANHO - 1);
   fflush(stdin);
   gets(input);
@@ -110,7 +110,7 @@ int main()
   isValid(input);
 
   char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
-  int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0;
+  int leitor, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0;
 
   if (input[0] != '(' && !isdigit(input[0]))
   {
@@ -120,7 +120,7 @@ int main()
   while (loop < strlen(input))
   {
 
-    for (leitor; leitor < strlen(input); leitor++)
+    for (leitor = 0; leitor < strlen(input); leitor++)
     {
       // printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
       // printf("\n\n\tPegar Operador = %d.", pegarOperador);
@@ -204,6 +204,16 @@ int main()
 
     memset(pedaco, 0, strlen(pedaco));
     loop++;
+  }
+
+  printf("\n\n\n");
+
+  for(int i = 0; i < strlen(deitado[TAMANHO][TAMANHO]); i++)
+  {
+    for(int j = 0; j < strlen(deitado[TAMANHO][TAMANHO]); j++)
+    {
+      printf("%c", deitado[i][j]);
+    }
   }
 
   getchar();getchar();// Pausa o programa.
