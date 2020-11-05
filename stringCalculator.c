@@ -18,7 +18,7 @@ int isFloat(char input)
 
 void end()
 {
-  system("clear");
+  system("cls");
   printf("BURRO !");
   getchar();
   getchar();
@@ -113,11 +113,62 @@ int isTrueInMatrix(char emPe, char pedaco)
   }
 }
 
+void expression(int posicaoDeitado, char **deitado)
+{
+  char emPe[TAMANHO][TAMANHO];
+
+  int posicaoEmPe = -1;
+  int atual;
+  float num1, num2;
+  char oper;
+
+    for(atual = 0; atual <= posicaoDeitado; atual++)
+    {
+        if(isFloat(deitado[atual][0]))
+        {
+            posicaoEmPe++;
+            strcpy(emPe[posicaoEmPe], deitado[atual]);
+        }
+        else
+        {
+            if(posicaoEmPe < 1)
+            {
+                end();
+            }
+            oper = deitado[atual][0];
+            num2 = atof(emPe[posicaoEmPe]);
+            posicaoEmPe--;
+            num1 = atof(emPe[posicaoEmPe]);
+
+            switch(oper)
+            {
+            case '+':
+                sprintf(emPe[posicaoEmPe], "%f", num1+num2);
+                break;
+            case '-':
+                sprintf(emPe[posicaoEmPe], "%f", num1-num2);
+                break;
+            case '*':
+                sprintf(emPe[posicaoEmPe], "%f", num1*num2);
+                break;
+            case '/':
+                sprintf(emPe[posicaoEmPe], "%f", num1/num2);
+                break;
+            case '^':
+                sprintf(emPe[posicaoEmPe], "%f", pow(num1, num2));
+                break;
+            }
+        }
+    }
+
+    printf("RESULTADO: %s\n", emPe[0]);
+}
+
 int main()
 {
   char input[TAMANHO];
 
-  system("clear");
+  system("cls");
   printf("Digite uma string de ate %d caracteres: ", TAMANHO - 1);
   fflush(stdin);
   gets(input);
@@ -292,8 +343,10 @@ int main()
 
   printf("\n\nPosição deitado final: %d", posicaoDeitado);
 
+  expression(posicaoDeitado, deitado);
+
   //Pausa o programa.
   getchar();
-  getchar(); 
+  getchar();
   return (0);
 }
