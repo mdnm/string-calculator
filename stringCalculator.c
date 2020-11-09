@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 #define TAMANHO 100
 
@@ -9,7 +10,7 @@ char operadores[7] = {'(', '^', '*', '/', '+', '-', ')'};
 
 int isFloat(char input)
 {
-  if(isdigit(input) || input == '.' || input == ',')
+  if (isdigit(input) || input == '.' || input == ',')
   {
     return 1;
   }
@@ -79,9 +80,9 @@ void isValid(char *str)
       end();
     }
 
-    if(str[i] == '.' || str[i] == ',')
+    if (str[i] == '.' || str[i] == ',')
     {
-      if(i == 0 || !isdigit(str[i - 1]) || i + 1 == strlen(str) || !isdigit(str[i + 1]))
+      if (i == 0 || !isdigit(str[i - 1]) || i + 1 == strlen(str) || !isdigit(str[i + 1]))
       {
         end();
       }
@@ -122,46 +123,46 @@ void expression(int posicaoDeitado, char deitado[TAMANHO][TAMANHO])
   float num1, num2;
   char oper;
 
-    for(atual = 0; atual <= posicaoDeitado; atual++)
+  for (atual = 0; atual <= posicaoDeitado; atual++)
+  {
+    if (isFloat(deitado[atual][0]))
     {
-        if(isFloat(deitado[atual][0]))
-        {
-            posicaoEmPe++;
-            strcpy(emPe[posicaoEmPe], deitado[atual]);
-        }
-        else
-        {
-            if(posicaoEmPe < 1)
-            {
-                printf("\n\n\nERRO!!");
-            }
-            oper = deitado[atual][0];
-            num2 = atof(emPe[posicaoEmPe]);
-            posicaoEmPe--;
-            num1 = atof(emPe[posicaoEmPe]);
-
-            switch(oper)
-            {
-            case '+':
-                sprintf(emPe[posicaoEmPe], "%f", num1+num2);
-                break;
-            case '-':
-                sprintf(emPe[posicaoEmPe], "%f", num1-num2);
-                break;
-            case '*':
-                sprintf(emPe[posicaoEmPe], "%f", num1*num2);
-                break;
-            case '/':
-                sprintf(emPe[posicaoEmPe], "%f", num1/num2);
-                break;
-            case '^':
-                sprintf(emPe[posicaoEmPe], "%f", pow(num1, num2));
-                break;
-            }
-        }
+      posicaoEmPe++;
+      strcpy(emPe[posicaoEmPe], deitado[atual]);
     }
+    else
+    {
+      if (posicaoEmPe < 1)
+      {
+        printf("\n\n\nERRO!!");
+      }
+      oper = deitado[atual][0];
+      num2 = atof(emPe[posicaoEmPe]);
+      posicaoEmPe--;
+      num1 = atof(emPe[posicaoEmPe]);
 
-    printf("\n\n\nRESULTADO: %s\n", emPe[0]);
+      switch (oper)
+      {
+      case '+':
+        sprintf(emPe[posicaoEmPe], "%f", num1 + num2);
+        break;
+      case '-':
+        sprintf(emPe[posicaoEmPe], "%f", num1 - num2);
+        break;
+      case '*':
+        sprintf(emPe[posicaoEmPe], "%f", num1 * num2);
+        break;
+      case '/':
+        sprintf(emPe[posicaoEmPe], "%f", num1 / num2);
+        break;
+      case '^':
+        sprintf(emPe[posicaoEmPe], "%f", pow(num1, num2));
+        break;
+      }
+    }
+  }
+
+  printf("\n\n\nRESULTADO: %s\n", emPe[0]);
 }
 
 int main()
@@ -177,29 +178,32 @@ int main()
   isValid(input);
 
   char deitado[TAMANHO][TAMANHO], emPe[TAMANHO][TAMANHO], pedaco[TAMANHO];
-  int leitor = 0, pegarOperador = 0, posicaoDeitado = -1, posicaoEmPe = -1, loop = 1, ultimaPos = 0, fechouParenteses = 0, ultimoNumero = 0;
+  int leitor = 0, loop = 1, posicaoDeitado = -1, posicaoEmPe = -1,
+      pegarOperador = 0, ultimaPos = 0, fechouParenteses = 0, ultimoNumero = 0;
 
-  if (input[0] != '(' && !isFloat(input[0]))
+  if (input[0] != '(')
   {
-    end();
+    if (!isFloat(input[0]))
+    {
+      end();
+    }
+  }
+  else
+  {
+    pegarOperador = 1;
   }
 
   while (loop < strlen(input))
   {
-    printf("\n\nDei um loop e o leitor atual é: %d", leitor);
     for (leitor; leitor <= strlen(input); leitor++)
     {
-      // printf("\n\n------Entrei no for, meu leitor e %d e o tamanho do input e %d.", leitor, strlen(input));
-      // printf("\n\n\tPegar Operador = %d.", pegarOperador);
       if (isFloat(input[leitor]) && (leitor + 1) < strlen(input))
       {
         continue;
       }
 
-      // printf("\n\n ULTIMA POS %d.", ultimaPos);
       if (pegarOperador == 1)
       {
-        // printf("\n\nPeguei operador: %c.", input[leitor]);
         pedaco[0] = input[leitor];
         leitor++;
         ultimaPos = leitor;
@@ -207,13 +211,11 @@ int main()
       else
       {
         int tamanhoDigito = leitor - ultimaPos;
-        printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
-        printf("\n\n\tO leitor está em: %d.", leitor);
-        printf("\n\tA última posição é: %d.", ultimaPos);
         if (leitor + 1 == strlen(input) && isFloat(input[leitor + 1]))
         {
           tamanhoDigito++;
         }
+
         for (int j = 0; j < tamanhoDigito; j++)
         {
           pedaco[j] = input[ultimaPos];
@@ -246,7 +248,6 @@ int main()
           if (emPe[i][0] == '(' && pedaco[0] == ')')
           {
             fechouParenteses = 1;
-            printf("\n\n----Os parenteses sucumbiram MuaHaHaHa");
             memset(emPe[i], 0, strlen(emPe[i]));
             posicaoEmPe--;
             printf("\n\n----Agora posicaoEmPe é: %d.", posicaoEmPe);
@@ -263,32 +264,26 @@ int main()
         }
       }
 
-      //printf("\n\n FECHOU PARENTESES %d", fechouParenteses);
-      if (fechouParenteses != 1)
+      if (fechouParenteses == 0)
       {
         posicaoEmPe++;
         strcpy(emPe[posicaoEmPe], pedaco);
         printf("\n\nPeguei o pedaço <%s> e coloquei em emPe[%d].", emPe[posicaoEmPe], posicaoEmPe);
       }
+      else
+      {
+        fechouParenteses = 0;
+      }
 
-      // printf("\n\tAntes de entrar no if o input[leitor] é: %c.", input[leitor]);
       if (isFloat(input[leitor]))
       {
         pegarOperador = 0;
       }
     }
 
-    //Filtra quando o último número tem mais de um dígito.
-    if ((input[leitor] != ')' && fechouParenteses == 1) && leitor + 1 == strlen(input))
+    if (leitor + 1 == strlen(input) && strlen(pedaco) == 1)
     {
-      printf("\n\nSai do While no if");
-      //Se o último número tiver mais de um dígito, não executa o primeiro if após o while.
-      if(strlen(pedaco) == 1)
-      {
-        ultimoNumero = 1;
-      }
-      fechouParenteses = 0;
-
+      ultimoNumero = 1;
       break;
     }
 
@@ -296,15 +291,10 @@ int main()
     loop++;
   }
 
-  //Se o último número só tiver um dígito, ele executa esse if.
-  if(ultimoNumero == 1)
+  if (ultimoNumero == 1 && pegarOperador == 0)
   {
     leitor++;
     int tamanhoDigito = leitor - ultimaPos;
-    // printf("\n\n\tO tamanho do número é: %d.", tamanhoDigito);
-    // printf("\n\n\tO leitor está em: %d.", leitor);
-    // printf("\n\tA última posição é: %d.", ultimaPos);
-
     if (leitor + 1 == strlen(input) && isFloat(input[ultimaPos + 1]))
     {
       tamanhoDigito++;
@@ -317,13 +307,18 @@ int main()
     }
 
     posicaoDeitado++;
-      printf("\n\nPeguei o pedaco <%s> e coloquei em deitado[%d].", pedaco, posicaoDeitado);
-      strcpy(deitado[posicaoDeitado], pedaco);
-      pegarOperador = 1;
+    printf("\n\nPeguei o pedaco <%s> e coloquei em deitado[%d].", pedaco, posicaoDeitado);
+    strcpy(deitado[posicaoDeitado], pedaco);
+    pegarOperador = 1;
   }
 
-  for(int i = posicaoEmPe; i >= 0; i--)
+  for (int i = posicaoEmPe; i >= 0; i--)
   {
+    if (emPe[i][0] == '(' || emPe[i][0] == ')')
+    {
+      continue;
+    }
+
     posicaoDeitado++;
     strcpy(deitado[posicaoDeitado], emPe[i]);
 
@@ -331,13 +326,9 @@ int main()
     memset(emPe[i], 0, strlen(emPe[i]));
   }
 
-  for(int i = 0; i <= posicaoDeitado; i++)
+  printf("\n\nAssim ficou o vetor de string Deitado: ");
+  for (int i = 0; i <= posicaoDeitado; i++)
   {
-    if(i == 0)
-    {
-      printf("\n\nAssim ficou o vetor de string Deitado: ");
-    }
-
     printf("%s", deitado[i]);
   }
 
