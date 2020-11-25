@@ -211,7 +211,7 @@ int main()
       else
       {
         int tamanhoDigito = leitor - ultimaPos;
-        if (leitor + 1 == strlen(input) && isFloat(input[leitor + 1]))
+        if (leitor + 1 >= strlen(input))
         {
           tamanhoDigito++;
         }
@@ -281,7 +281,7 @@ int main()
       }
     }
 
-    if (leitor + 1 == strlen(input) && strlen(pedaco) == 1)
+    if ((input[leitor] != ')' && fechouParenteses == 1) && leitor + 1 == strlen(input) && strlen(pedaco) == 1)
     {
       ultimoNumero = 1;
       break;
